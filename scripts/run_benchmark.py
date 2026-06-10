@@ -26,10 +26,12 @@ def main() -> None:
     ap.add_argument("--no-sub-bars", action="store_true", help="skip loading 1m/5m/15m aux (faster)")
     args = ap.parse_args()
 
-    repo = attach_benchmark(args.benchmark_repo)
-    from src.benchmark import load_benchmark_data, run_benchmark   # noqa: E402 (path attached above)
-
-    data = load_benchmark_data(repo, include_sub_bars=not args.no_sub_bars)
+    bm, repo = attach_benchmark(args.benchmark_repo)
+    if repo is None:
+        raise SystemExit("need the btc_benchmark checkout for the data bundle -- "
+                         "set $BTC_BENCHMARK_REPO or pass --benchmark-repo")
+    data = bm.load_benchmark_data(repo, include_sub_bars=not args.no_sub_bars)
+    run_benchmark = bm.run_benchmark
     strategy = load_strategy(args.strategy)
     report = run_benchmark(strategy, data, team=args.team,
                            leaderboard_path="results/leaderboard.jsonl")
