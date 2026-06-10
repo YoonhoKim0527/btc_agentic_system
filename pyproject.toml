@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "btc-agentic-system"
+version = "0.1.0"
+description = "Upgradeable agent/strategy system for the BTC trading benchmark (btc_autoresearch)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "xgboost",
+]
+
+[project.optional-dependencies]
+extra-models = ["lightgbm", "catboost", "scikit-learn"]
+
+[tool.setuptools]
+packages = ["agentic", "agentic.strategies"]
